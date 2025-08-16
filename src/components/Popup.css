@@ -1,0 +1,10 @@
+.popupContainer {
+  position: absolute;       /* positioned relative to parent */
+  background-color: transparent;
+  z-index: 1000;
+}
+
+.triger{
+    cursor: pointer;
+}
+

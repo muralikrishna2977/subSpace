@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useSignInEmailPassword } from "@nhost/react";
 import { useNavigate } from "react-router-dom";
-import "./SignIn.scss";
+import "./SignIn.css";
 
 function SignIn() {
   const [email, setEmail] = useState("muralikrishna1502887@gmail.com");
-  const [password, setPassword] = useState("Pilot@1502887#");
+  const [password, setPassword] = useState("abcd@1234");
 
   const navigate = useNavigate();
 
@@ -59,6 +59,17 @@ function SignIn() {
 
       <div className="signinmessage">
         {isError && <p style={{ color: "red" }}>{error?.message}</p>}
+      </div>
+
+      <div className="demo-credentials">
+        <h4 className="demo-title">Test Users for Demo:</h4>
+        <div className="demo-user">
+          <span><strong>Email:</strong> <code>muralikrishna1502887@gmail.com</code></span>
+          <span><strong>Password:</strong> <code>abcd@1234</code></span>
+        </div>
+        <p className="demo-note">
+          <em>Use these credentials to log in and test the chat features instantly.</em>
+        </p>
       </div>
     </div>
   );

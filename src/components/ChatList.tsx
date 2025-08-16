@@ -94,7 +94,7 @@ export default function ChatList({
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search..."
+          placeholder="Search chats..."
         />
       </div>
       <ul className="chat-list">

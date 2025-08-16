@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSignUpEmailPassword } from "@nhost/react";
 import { useNavigate } from "react-router-dom";
-import "./SignUp.scss";
+import "./SignUp.css";
 
 function SignUp() {
   const [firstName, setFirstName] = useState("");

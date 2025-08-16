@@ -1,15 +1,15 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { NhostProvider } from '@nhost/react'
-import { Toaster } from 'react-hot-toast'
-import "katex/dist/katex.min.css"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { NhostProvider } from "@nhost/react";
+import { Toaster } from "react-hot-toast";
+import "katex/dist/katex.min.css";
 
-import SignUp from './pages/SignUp'
-import SignIn from './pages/SignIn'
-import Dashboard from './pages/Dashboard'
-import { nhost } from './lib/nhost'
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
+import Dashboard from "./pages/Dashboard";
+import { nhost } from "./lib/nhost";
 
 // import "./styles.css"
-import RequireAuth from './pages/RequireAuth'
+import RequireAuth from "./pages/RequireAuth";
 
 export default function App() {
   return (
@@ -27,5 +27,5 @@ export default function App() {
       </BrowserRouter>
       <Toaster />
     </NhostProvider>
-  )
+  );
 }

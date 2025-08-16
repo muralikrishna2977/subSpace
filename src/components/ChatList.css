@@ -18,31 +18,31 @@
   gap: 8px;
 }
 
-.chatListHeader{
-    display: flex;
-    align-items: center;
-    justify-content: space-between; 
-    margin-bottom: 5px;
+.chatListHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
 }
-.chatListHeader h3{
-    margin: 0;
+.chatListHeader h3 {
+  margin: 0;
 }
-.searchInput{
-      flex: 1;
+.searchInput {
+  flex: 1;
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   outline: none;
 }
-.newChatTrigger{
-    width: 100px;
+.newChatTrigger {
+  width: 100px;
 }
 
-
-
-.newChatButton{
+.newChatButton {
   padding: 10px 18px;
   background-color: #c6ddfa;
   font-size: 14px;
@@ -52,11 +52,9 @@
   cursor: pointer;
 }
 
-.newChatButton:hover{
-    background-color: #a7c3f2;
-}   
-
-
+.newChatButton:hover {
+  background-color: #a7c3f2;
+}
 
 .newChattInput {
   display: flex;
@@ -76,7 +74,9 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .newChattInput input:focus {
@@ -85,7 +85,7 @@
   outline: none;
 }
 
-.newChattInput button {
+.confirmCancel button {
   padding: 5px 9px;
   background-color: #c6ddfa;
   font-size: 14px;
@@ -95,56 +95,57 @@
   cursor: pointer;
 }
 
-.confirmCancel{
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.confirmCancel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
+.confirmCancel button:disabled {
+  cursor: not-allowed;
+}
 
 .chat-list {
   list-style: none;
-  padding: 0 8px 0 0; 
+  padding: 0 8px 0 0;
   margin: 12px 0 0;
   overflow: auto;
   box-sizing: border-box;
 }
 
-
 .chat-list::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 .chat-list::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 5px;
+  background: #f1f1f1;
+  border-radius: 5px;
 }
 .chat-list::-webkit-scrollbar-thumb {
-    background: rgb(186, 186, 186);
-    border-radius: 5px;
+  background: rgb(186, 186, 186);
+  border-radius: 5px;
 }
 .chat-list::-webkit-scrollbar-thumb:hover {
-    background: gray;
+  background: gray;
 }
 
-
-.chat-item { 
-    margin-right: "10px"; 
-    width:100%; 
-    text-align:left; 
-    background:#f8fafc; 
-    border:1px solid #e5e7eb; 
-    padding:8px 10px; 
-    border-radius:8px; 
-    margin-bottom:8px; 
-    cursor: pointer;
+.chat-item {
+  margin-right: "10px";
+  width: 100%;
+  text-align: left;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
 }
-.chat-item.active { 
-  background:#c6ddfa; 
+.chat-item.active {
+  background: #c6ddfa;
 }
-.chat-title { 
-  font-weight:600; 
+.chat-title {
+  font-weight: 600;
 }
-.chat-time { 
-  font-size:12px; 
-  color:#6b7280; 
+.chat-time {
+  font-size: 12px;
+  color: #6b7280;
 }

@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from 'react'
-import { fetchMessages, subscribeMessages, sendMessageFlow } from '../api/chat'
-import type { Message } from '../types'
-import "./ChatWindow.css"
+import { useEffect, useRef, useState } from "react";
+import { fetchMessages, subscribeMessages, sendMessageFlow } from "../api/chat";
+import type { Message } from "../types";
+import "./ChatWindow.css";
 
-import ProfileIcon from "../assets/profile.svg"
-import SendIcon from "../assets/send.svg"
-import Popup from './Popup'
-import { useSignOut } from '@nhost/react'
-import { useNavigate } from 'react-router-dom'
-import IntroComponent from './IntroComponent'
+import ProfileIcon from "../assets/profile.svg";
+import SendIcon from "../assets/send.svg";
+import Popup from "./Popup";
+import { useSignOut } from "@nhost/react";
+import { useNavigate } from "react-router-dom";
+import IntroComponent from "./IntroComponent";
 
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
@@ -16,46 +16,53 @@ import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 // import "katex/dist/katex.min.css";
 
-const convertDate = (date: string) => { 
+const convertDate = (date: string) => {
   return new Date(date).toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
   });
-
-}
+};
 
 type Props = {
-  chatId: string | null
-  selectedChatName?: string
-  displayName?:string
-  email?:string
-}
+  chatId: string | null;
+  selectedChatName?: string;
+  displayName?: string;
+  email?: string;
+};
 
-export default function ChatWindow({displayName, email, selectedChatName, chatId }: Props) {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [input, setInput] = useState('')
-  const disposeRef = useRef<() => void>(null)
-  const scrollReff=useRef<HTMLDivElement | null>(null)
-    const { signOut, isSuccess, error} = useSignOut()
-  const navigate = useNavigate()
+export default function ChatWindow({
+  displayName,
+  email,
+  selectedChatName,
+  chatId,
+}: Props) {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const disposeRef = useRef<() => void>(null);
+  const scrollReff = useRef<HTMLDivElement | null>(null);
+  const { signOut, isSuccess, error } = useSignOut();
+  const navigate = useNavigate();
 
-  
   useEffect(() => {
-    if (!chatId) { setMessages([]); return }
-    let dispose: any
-    ;(async () => {
-      setMessages(await fetchMessages(chatId))
+    if (!chatId) {
+      setMessages([]);
+      return;
+    }
+    let dispose: any;
+    (async () => {
+      setMessages(await fetchMessages(chatId));
       dispose = subscribeMessages(
         chatId,
         (msgs) => setMessages(msgs),
-        (e)=>console.error('subscription error', e)
-      )
-      disposeRef.current = dispose
-    })()
-    return () => { dispose?.() }
-  }, [chatId])
-
+        (e) => console.error("subscription error", e),
+      );
+      disposeRef.current = dispose;
+    })();
+    return () => {
+      dispose?.();
+    };
+  }, [chatId]);
 
   useEffect(() => {
     if (scrollReff.current) {
@@ -63,32 +70,29 @@ export default function ChatWindow({displayName, email, selectedChatName, chatId
     }
   }, [messages]);
 
-
   async function onSend() {
-    if (!chatId || !input.trim()) return
-    const text = input.trim()
-    setInput('')
+    if (!chatId || !input.trim()) return;
+    const text = input.trim();
+    setInput("");
     try {
-      await sendMessageFlow(chatId, text)
+      await sendMessageFlow(chatId, text);
       // assistant reply will appear via subscription
-    } catch (e:any) {
-      alert(e.message || 'Failed to send')
+    } catch (e: any) {
+      alert(e.message || "Failed to send");
     }
   }
 
-   const handleLogout = async () => {
-    await signOut() // clears tokens & session
-  }
+  const handleLogout = async () => {
+    await signOut(); // clears tokens & session
+  };
 
-    useEffect(() => {
+  useEffect(() => {
     if (isSuccess) {
-      navigate('/')
+      navigate("/");
     } else if (error) {
-      alert(`Logout failed: ${error?.message || 'Unknown error'}`)
+      alert(`Logout failed: ${error?.message || "Unknown error"}`);
     }
-  }, [isSuccess, error, navigate])
-
-
+  }, [isSuccess, error, navigate]);
 
   return (
     <main className="chat-window">
@@ -99,21 +103,25 @@ export default function ChatWindow({displayName, email, selectedChatName, chatId
             <div className="profile">
               <h4>{displayName}</h4>
               <p>{email}</p>
-              <button className="logoutButton" onClick={handleLogout}>LogOut</button>
+              <button className="logoutButton" onClick={handleLogout}>
+                LogOut
+              </button>
             </div>
           }
         >
-          <img src={ProfileIcon} height="30px" width="30px"/>
+          <img src={ProfileIcon} height="30px" width="30px" />
         </Popup>
       </div>
       {!chatId ? (
-        <IntroComponent/>
+        <IntroComponent />
       ) : (
         <>
           <div ref={scrollReff} className="messages">
-            {messages.map(m => (
+            {messages.map((m) => (
               <div key={m.id} className={`bubble ${m.role}`}>
-                <div className="bubble-role">{m.role === 'user' ? 'You' : 'Assistant'}</div>
+                <div className="bubble-role">
+                  {m.role === "user" ? "You" : "Assistant"}
+                </div>
                 {/* <div style={{ whiteSpace: "pre-wrap" }}>{m.content}</div> */}
                 <ReactMarkdown
                   remarkPlugins={[remarkMath, remarkGfm]}
@@ -128,15 +136,22 @@ export default function ChatWindow({displayName, email, selectedChatName, chatId
           <div className="composer">
             <input
               value={input}
-              onChange={(e)=>setInput(e.target.value)}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Type a message…"
-              onKeyDown={(e)=> e.key==='Enter' && onSend()}
+              onKeyDown={(e) => e.key === "Enter" && onSend()}
             />
-            {input && <img className="sendButton" onClick={onSend} src={SendIcon} height="40px" width="40px" />}
+            {input && (
+              <img
+                className="sendButton"
+                onClick={onSend}
+                src={SendIcon}
+                height="40px"
+                width="40px"
+              />
+            )}
           </div>
         </>
       )}
     </main>
-  )
+  );
 }
-

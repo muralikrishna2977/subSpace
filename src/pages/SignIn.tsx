@@ -9,12 +9,8 @@ function SignIn() {
 
   const navigate = useNavigate();
 
-  const {
-    signInEmailPassword,
-    isLoading,
-    isError,
-    error
-  } = useSignInEmailPassword();
+  const { signInEmailPassword, isLoading, isError, error } =
+    useSignInEmailPassword();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -24,7 +20,7 @@ function SignIn() {
       navigate("/dashboard");
     }
 
-    if (res.isSuccess || res.error?.error === 'already-signed-in') {
+    if (res.isSuccess || res.error?.error === "already-signed-in") {
       navigate("/dashboard");
     }
   };
@@ -56,13 +52,14 @@ function SignIn() {
 
       <div className="signnuppage">
         <p>Don't have an account?</p>
-        <button className="signUpInSignIn" onClick={() => navigate("/sign-up")}>Sign Up</button>
+        <button className="signUpInSignIn" onClick={() => navigate("/sign-up")}>
+          Sign Up
+        </button>
       </div>
 
       <div className="signinmessage">
         {isError && <p style={{ color: "red" }}>{error?.message}</p>}
       </div>
-
     </div>
   );
 }

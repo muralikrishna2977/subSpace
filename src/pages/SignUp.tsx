@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSignUpEmailPassword } from "@nhost/react";
 import { useNavigate } from "react-router-dom";
+import { nhost } from "../lib/nhost";
 import "./SignUp.css";
 
 function SignUp() {
@@ -9,29 +10,38 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const [submitted, setSubmitted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const { signUpEmailPassword, isLoading, isError, error } =
+  const { signUpEmailPassword, isLoading, isError, error, isSuccess } =
     useSignUpEmailPassword();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       alert("Passwords do not match");
       return;
     }
-    const res = await signUpEmailPassword(email, password, {
+
+    setSubmitted(true);
+
+    await nhost.auth.signOut();
+
+    await signUpEmailPassword(email, password, {
       displayName: `${firstName} ${lastName}`.trim(),
     });
-
-    if (res.isSuccess) {
-      // navigate only if you want
-      navigate("/");
-    } else if (res.isError) {
-      alert("SignUp failed");
-    }
   };
+
+  useEffect(() => {
+    if (submitted && isSuccess) {
+      const timer = setTimeout(() => {
+        navigate("/");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitted, isSuccess, navigate]);
 
   return (
     <div className="signup">
@@ -62,7 +72,7 @@ function SignUp() {
           disabled={isLoading}
         />
         <input
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -70,13 +80,22 @@ function SignUp() {
           disabled={isLoading}
         />
         <input
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Confirm Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
           disabled={isLoading}
         />
+        <div className="showpasswordCheckbox">
+          <input
+            type="checkbox"
+            checked={showPassword}
+            onChange={(e) => setShowPassword(e.target.checked)}
+          />
+          <label>Show password</label>
+        </div>
+
         <button type="submit" disabled={isLoading}>
           {isLoading ? "Signing Up..." : "Sign Up"}
         </button>
@@ -86,7 +105,11 @@ function SignUp() {
         <p>Already have an account?</p>
         <button onClick={() => navigate("/")}>Sign In</button>
       </div>
+
       {isError && <p style={{ color: "red" }}>{error?.message}</p>}
+      {submitted && isSuccess && (
+        <p style={{ color: "green" }}>Signup successful! Redirecting…</p>
+      )}
     </div>
   );
 }

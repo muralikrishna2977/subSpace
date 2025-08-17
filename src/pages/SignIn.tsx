@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useSignInEmailPassword } from "@nhost/react";
 import { useNavigate } from "react-router-dom";
 import "./SignIn.css";
+import { nhost } from "../lib/nhost";
 
 function SignIn() {
-  const [email, setEmail] = useState("muralikrishna1502887@gmail.com");
-  const [password, setPassword] = useState("abcd@1234");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -14,6 +16,7 @@ function SignIn() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    await nhost.auth.signOut();
     const res = await signInEmailPassword(email, password);
 
     if (res.isSuccess) {
@@ -38,13 +41,23 @@ function SignIn() {
           disabled={isLoading}
         />
         <input
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
           disabled={isLoading}
         />
+
+        <div className="showpasswordCheckbox">
+          <input
+            type="checkbox"
+            checked={showPassword}
+            onChange={(e) => setShowPassword(e.target.checked)}
+          />
+          <label>Show password</label>
+        </div>
+
         <button className="signInSubmit" type="submit" disabled={isLoading}>
           {isLoading ? "Signing In..." : "Sign In"}
         </button>
@@ -64,11 +77,18 @@ function SignIn() {
       <div className="demo-credentials">
         <h4 className="demo-title">Test Users for Demo:</h4>
         <div className="demo-user">
-          <span><strong>Email:</strong> <code>muralikrishna1502887@gmail.com</code></span>
-          <span><strong>Password:</strong> <code>abcd@1234</code></span>
+          <span>
+            <strong>Email:</strong> <code>muralikrishna1502887@gmail.com</code>
+          </span>
+          <span>
+            <strong>Password:</strong> <code>abcd@1234</code>
+          </span>
         </div>
         <p className="demo-note">
-          <em>Use these credentials to log in and test the chat features instantly.</em>
+          <em>
+            Use these credentials to log in and test the chatbot features
+            instantly.
+          </em>
         </p>
       </div>
     </div>

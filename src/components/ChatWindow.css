@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: space-between;
   padding-left: 30px;
-  padding-right: 100px;
+  padding-right: 30px;
   box-sizing: border-box;
 }
 
@@ -88,6 +88,7 @@
 }
 
 .composerInput input {
+  height: 95%;
   background-color: #c6ddfa;
   margin-left: 30px;
   border: none;
@@ -128,5 +129,17 @@
 
 .sendButton {
   cursor: pointer;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
   margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sendButton:disabled{
+  cursor: not-allowed;
 }

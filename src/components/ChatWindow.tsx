@@ -151,15 +151,9 @@ export default function ChatWindow({
                 placeholder={thinking ? "Thinking..." : "Type a message…"}
                 onKeyDown={(e) => e.key === "Enter" && onSend()}
               />
-              {input && (
-                <img
-                  className="sendButton"
-                  onClick={onSend}
-                  src={SendIcon}
-                  height="40px"
-                  width="40px"
-                />
-              )}
+              <button disabled={!input} className="sendButton" onClick={onSend}>
+                <img src={SendIcon} height="40px" width="40px" />
+              </button>
             </div>
           </div>
         </>

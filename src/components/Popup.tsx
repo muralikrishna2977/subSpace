@@ -4,10 +4,10 @@ import { useRef, useEffect, useState, useMemo, useLayoutEffect } from "react";
 
 type Props = {
   children: React.ReactNode;
-  content: React.ReactNode; 
+  content: React.ReactNode;
   align?: "left" | "right" | "topCenter";
   triggerClassName?: string;
-  openProp?: boolean; 
+  openProp?: boolean;
   setOpenProp?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -46,13 +46,19 @@ function Popup({
 
   const popupContainerStyle = useMemo(() => {
     if (align === "left") {
-      return { top: `${triggerHeight}px`, left: `-${popupWidth - triggerWidth}px` };
+      return {
+        top: `${triggerHeight}px`,
+        left: `-${popupWidth - triggerWidth}px`,
+      };
     }
     if (align === "right") {
       return { top: `${triggerHeight}px`, left: "0px" };
     }
-    if(align==="topCenter"){
-      return { top: `-${popupHeight+6}px`, left: `${triggerWidth/2-popupWidth/2}px` };
+    if (align === "topCenter") {
+      return {
+        top: `-${popupHeight + 6}px`,
+        left: `${triggerWidth / 2 - popupWidth / 2}px`,
+      };
     }
     return {};
   }, [align, popupHeight, popupWidth, triggerHeight, triggerWidth]);

@@ -64,7 +64,6 @@ export default function ChatList({
             setNewChatName={setNewChatName}
             confirmCreateChat={confirmCreateChat}
           />
-          
         </div>
         <input
           className="searchInput"
@@ -83,7 +82,6 @@ export default function ChatList({
             >
               <div className="chat-title">{c.title || "(untitled)"}</div>
               <div className="chat-time">
-              
                 <div className="chat-time">
                   <div>
                     {(() => {
@@ -93,7 +91,11 @@ export default function ChatList({
                       yesterday.setDate(today.getDate() - 1);
 
                       const format = (d: Date) =>
-                        d.toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit" });
+                        d.toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                        });
 
                       if (format(date) === format(today)) {
                         return "Today";
@@ -117,9 +119,7 @@ export default function ChatList({
                     })}
                   </div>
                 </div>
-
               </div>
-
             </button>
           </li>
         ))}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { fetchMessages, subscribeMessages, sendMessageFlow } from "../api/chat";
 import type { Chat, Message } from "../types";
 import "./ChatWindow.css";
@@ -97,6 +97,12 @@ export default function ChatWindow({
     }
   }, [isSuccess, error, navigate]);
 
+  const thinking = useMemo(() => {
+    const length = messages.length;
+    if (length === 0) return false;
+    return messages[length - 1]?.role !== "assistant";
+  }, [messages]);
+
   return (
     <main className="chat-window">
       <div className="headerContainer">
@@ -137,12 +143,12 @@ export default function ChatWindow({
             ))}
           </div>
           <div className="composer">
-
             <div className="composerInput">
               <input
+                disabled={thinking}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type a message…"
+                placeholder={thinking ? "Thinking..." : "Type a message…"}
                 onKeyDown={(e) => e.key === "Enter" && onSend()}
               />
               {input && (
@@ -155,7 +161,6 @@ export default function ChatWindow({
                 />
               )}
             </div>
-
           </div>
         </>
       )}

@@ -73,10 +73,10 @@
   gap: 8px;
   padding: 0px 12px;
   height: 70px;
-    background: transparent; /* let edges show behind */
+  background: transparent; /* let edges show behind */
 }
 
-.composerInput{
+.composerInput {
   display: flex;
   align-items: center;
   width: 95%;
@@ -85,7 +85,6 @@
   border: solid 1px #c6c6c6;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: #c6ddfa;
-
 }
 
 .composerInput input {

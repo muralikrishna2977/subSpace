@@ -23,12 +23,14 @@
   border: 1px solid #dcdcdc;
   border-radius: 8px;
   font-size: 1rem;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .signinform input:focus {
   border-color: #c6ddfa;
-  box-shadow: 0 0 0 2px rgba(0,119,230,0.2);
+  box-shadow: 0 0 0 2px rgba(0, 119, 230, 0.2);
   outline: none;
 }
 

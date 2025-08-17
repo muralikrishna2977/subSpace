@@ -11,25 +11,24 @@ type Props = {
 };
 
 function IntroComponent(props: Props) {
-    const { setChats, onSelectChat } = props;
-    const [newChatName, setNewChatName] = useState<string>("");
-    const [openNewChatPopup, setOpenNewChatPopup] = useState(false);
+  const { setChats, onSelectChat } = props;
+  const [newChatName, setNewChatName] = useState<string>("");
+  const [openNewChatPopup, setOpenNewChatPopup] = useState(false);
 
-    async function confirmCreateChat() {
-      setOpenNewChatPopup(false);
-  
-      try {
-        const capsName =
-          newChatName.charAt(0).toUpperCase() + newChatName.slice(1);
-        const c = await createChat(capsName);
-        setChats((prev) => [c, ...prev]);
-        onSelectChat(c.id);
-        setNewChatName("");
-      } catch (e: any) {
-        alert(e.message || "Failed to create chat");
-      }
+  async function confirmCreateChat() {
+    setOpenNewChatPopup(false);
+
+    try {
+      const capsName =
+        newChatName.charAt(0).toUpperCase() + newChatName.slice(1);
+      const c = await createChat(capsName);
+      setChats((prev) => [c, ...prev]);
+      onSelectChat(c.id);
+      setNewChatName("");
+    } catch (e: any) {
+      alert(e.message || "Failed to create chat");
     }
-
+  }
 
   return (
     <div className="intro">
@@ -46,6 +45,6 @@ function IntroComponent(props: Props) {
       />
     </div>
   );
-};
+}
 
 export default IntroComponent;

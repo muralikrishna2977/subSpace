@@ -143,18 +143,25 @@ export default function ChatWindow({
             ))}
           </div>
           <div className="composer">
+
             <div className="composerInput">
               <input
                 disabled={thinking}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder={thinking ? "Thinking..." : "Type a message…"}
+                placeholder={thinking ? "Processing..." : "Type a message…"}
                 onKeyDown={(e) => e.key === "Enter" && onSend()}
               />
-              <button disabled={!input} className="sendButton" onClick={onSend}>
-                <img src={SendIcon} height="40px" width="40px" />
+
+              <button disabled={!input || thinking} className="sendButton" onClick={onSend}>
+                {thinking ? (
+                  <div className="spinner" />
+                ) : (
+                  <img src={SendIcon} height="40px" width="40px" />
+                )}
               </button>
             </div>
+
           </div>
         </>
       )}

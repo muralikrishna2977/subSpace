@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchMessages, subscribeMessages, sendMessageFlow } from "../api/chat";
-import type { Message } from "../types";
+import type { Chat, Message } from "../types";
 import "./ChatWindow.css";
 
 import ProfileIcon from "../assets/profile.svg";
@@ -29,6 +29,8 @@ type Props = {
   selectedChatName?: string;
   displayName?: string;
   email?: string;
+  setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
+  onSelectChat: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 export default function ChatWindow({
@@ -36,6 +38,8 @@ export default function ChatWindow({
   email,
   selectedChatName,
   chatId,
+  setChats,
+  onSelectChat,
 }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -76,14 +80,13 @@ export default function ChatWindow({
     setInput("");
     try {
       await sendMessageFlow(chatId, text);
-      // assistant reply will appear via subscription
     } catch (e: any) {
       alert(e.message || "Failed to send");
     }
   }
 
   const handleLogout = async () => {
-    await signOut(); // clears tokens & session
+    await signOut();
   };
 
   useEffect(() => {
@@ -113,7 +116,7 @@ export default function ChatWindow({
         </Popup>
       </div>
       {!chatId ? (
-        <IntroComponent />
+        <IntroComponent setChats={setChats} onSelectChat={onSelectChat} />
       ) : (
         <>
           <div ref={scrollReff} className="messages">
@@ -134,21 +137,25 @@ export default function ChatWindow({
             ))}
           </div>
           <div className="composer">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type a message…"
-              onKeyDown={(e) => e.key === "Enter" && onSend()}
-            />
-            {input && (
-              <img
-                className="sendButton"
-                onClick={onSend}
-                src={SendIcon}
-                height="40px"
-                width="40px"
+
+            <div className="composerInput">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type a message…"
+                onKeyDown={(e) => e.key === "Enter" && onSend()}
               />
-            )}
+              {input && (
+                <img
+                  className="sendButton"
+                  onClick={onSend}
+                  src={SendIcon}
+                  height="40px"
+                  width="40px"
+                />
+              )}
+            </div>
+
           </div>
         </>
       )}

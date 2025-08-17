@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchChats, createChat } from "../api/chat";
 import type { Chat } from "../types";
 import "./ChatList.css";
-import Popup from "./Popup";
+import NewChatPopup from "./NewChatPopup";
 
 type Props = {
   selectedChatId: string | null;
@@ -56,38 +56,15 @@ export default function ChatList({
       <div className="sidebar-header">
         <div className="chatListHeader">
           <h3>Chats</h3>
-          <Popup
-            content={
-              <div className="newChattInput">
-                <input
-                  type="text"
-                  placeholder="Chat Name"
-                  value={newChatName}
-                  onChange={(e) => setNewChatName(e.target.value)}
-                />
-
-                <div className="confirmCancel">
-                  <button
-                    onClick={confirmCreateChat}
-                    disabled={!newChatName.trim()}
-                  >
-                    Create
-                  </button>
-                </div>
-              </div>
-            }
+          <NewChatPopup
+            openNewChatPopup={openNewChatPopup}
+            setOpenNewChatPopup={setOpenNewChatPopup}
             align="right"
-            triggerClassName="newChatTrigger"
-            openProp={openNewChatPopup}
-            setOpenProp={setOpenNewChatPopup}
-          >
-            <button
-              className="newChatButton"
-              onClick={() => setOpenNewChatPopup(true)}
-            >
-              New Chat
-            </button>
-          </Popup>
+            newChatName={newChatName}
+            setNewChatName={setNewChatName}
+            confirmCreateChat={confirmCreateChat}
+          />
+          
         </div>
         <input
           className="searchInput"
@@ -106,8 +83,43 @@ export default function ChatList({
             >
               <div className="chat-title">{c.title || "(untitled)"}</div>
               <div className="chat-time">
-                {new Date(c.updated_at).toLocaleString()}
+              
+                <div className="chat-time">
+                  <div>
+                    {(() => {
+                      const date = new Date(c.updated_at);
+                      const today = new Date();
+                      const yesterday = new Date();
+                      yesterday.setDate(today.getDate() - 1);
+
+                      const format = (d: Date) =>
+                        d.toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit" });
+
+                      if (format(date) === format(today)) {
+                        return "Today";
+                      } else if (format(date) === format(yesterday)) {
+                        return "Yesterday";
+                      } else {
+                        return date.toLocaleDateString("en-US", {
+                          month: "numeric",
+                          day: "numeric",
+                          year: "2-digit",
+                        });
+                      }
+                    })()}
+                  </div>
+
+                  <div>
+                    {new Date(c.updated_at).toLocaleTimeString("en-US", {
+                      hour: "numeric",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                  </div>
+                </div>
+
               </div>
+
             </button>
           </li>
         ))}

@@ -3,12 +3,12 @@ import "./Popup.css";
 import { useRef, useEffect, useState, useMemo, useLayoutEffect } from "react";
 
 type Props = {
-  children: React.ReactNode; // the trigger (button, icon, etc.)
-  content: React.ReactNode;  // the popup content
-  align?: "left" | "right";
+  children: React.ReactNode;
+  content: React.ReactNode; 
+  align?: "left" | "right" | "topCenter";
   triggerClassName?: string;
-  openProp?: boolean; // controlled mode
-  setOpenProp?: React.Dispatch<React.SetStateAction<boolean>>; // controlled mode setter
+  openProp?: boolean; 
+  setOpenProp?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function Popup({
@@ -20,6 +20,7 @@ function Popup({
   setOpenProp,
 }: Props) {
   const [popupWidth, setPopupWidth] = useState<number>(0);
+  const [popupHeight, setPopupHeight] = useState<number>(0);
   const [triggerHeight, setTriggerHeight] = useState<number>(0);
   const [triggerWidth, setTriggerWidth] = useState<number>(0);
   const [internalOpen, setInternalOpen] = useState<boolean>(false);
@@ -27,10 +28,8 @@ function Popup({
   const triggerRef = useRef<HTMLDivElement | null>(null);
   const popupContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // pick either controlled or uncontrolled state
   const open = typeof openProp === "boolean" ? openProp : internalOpen;
 
-  // measure trigger size
   useLayoutEffect(() => {
     if (triggerRef.current) {
       setTriggerHeight(triggerRef.current.offsetHeight);
@@ -38,14 +37,13 @@ function Popup({
     }
   }, [open]);
 
-  // measure popup width
   useLayoutEffect(() => {
     if (popupContainerRef.current) {
       setPopupWidth(popupContainerRef.current.offsetWidth);
+      setPopupHeight(popupContainerRef.current.offsetHeight);
     }
   }, [open]);
 
-  // calculate popup style
   const popupContainerStyle = useMemo(() => {
     if (align === "left") {
       return { top: `${triggerHeight}px`, left: `-${popupWidth - triggerWidth}px` };
@@ -53,10 +51,12 @@ function Popup({
     if (align === "right") {
       return { top: `${triggerHeight}px`, left: "0px" };
     }
+    if(align==="topCenter"){
+      return { top: `-${popupHeight+6}px`, left: `${triggerWidth/2-popupWidth/2}px` };
+    }
     return {};
-  }, [align, popupWidth, triggerHeight, triggerWidth]);
+  }, [align, popupHeight, popupWidth, triggerHeight, triggerWidth]);
 
-  // outside click close
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -85,7 +85,6 @@ function Popup({
     };
   }, [open, openProp, setOpenProp]);
 
-  // toggle open
   const togglePopup = () => {
     if (typeof openProp === "boolean") {
       setOpenProp?.(!openProp);

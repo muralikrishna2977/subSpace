@@ -26,6 +26,8 @@ export default function Dashboard() {
         email={userData?.email}
         selectedChatName={selectedChatInfo?.title}
         chatId={selectedChatId}
+        setChats={setChats}
+        onSelectChat={setSelectedChatId}
       />
     </div>
   );

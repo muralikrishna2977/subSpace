@@ -120,7 +120,7 @@ export default function ChatWindow({
     // let timer: NodeJS.Timeout | null = null;
     let timer: ReturnType<typeof setTimeout> | null = null;
     if (isUserWaiting) {
-      timer = setTimeout(() => setThinking(false), 20000); // auto reset after 20s
+      timer = setTimeout(() => setThinking(false), 30000); // auto reset after 20s
     }
 
     return () => {

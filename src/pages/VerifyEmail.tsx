@@ -14,7 +14,7 @@ function VerifyEmail() {
 
     if (type === "verifyEmail" && refreshToken) {
       nhost.auth
-        .signIn({ refreshToken })
+        .refreshSession(refreshToken)
         .then(() => {
           setStatus("Email verified successfully! Redirecting...");
           setTimeout(() => navigate("/dashboard"), 2000);

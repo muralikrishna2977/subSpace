@@ -3,6 +3,7 @@ import { fetchChats, createChat } from "../api/chat";
 import type { Chat } from "../types";
 import "./ChatList.css";
 import NewChatPopup from "./NewChatPopup";
+import noChats from "../assets/noChats.svg";
 
 type Props = {
   selectedChatId: string | null;
@@ -122,7 +123,17 @@ export default function ChatList({
             </button>
           </li>
         ))}
+
       </ul>
+
+      {chats.length===0 &&
+        <div className="no-chats">
+          <img src={noChats} height="100px" width="100px" />
+          <p>No chats yet</p>
+          <p>Create a new chat to get started</p>
+        </div>
+      }
+    
     </aside>
   );
 }

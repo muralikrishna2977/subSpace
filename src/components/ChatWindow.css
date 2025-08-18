@@ -24,6 +24,7 @@
   flex-direction: column;
   gap: 8px;
 }
+
 .messages::-webkit-scrollbar {
   width: 6px;
 }

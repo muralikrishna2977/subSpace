@@ -29,14 +29,13 @@ export default function ChatList({
     setOpenNewChatPopup(false);
 
     try {
-      const capsName =
-        newChatName.charAt(0).toUpperCase() + newChatName.slice(1);
+      const capsName = newChatName.charAt(0).toUpperCase() + newChatName.slice(1);
       const c = await createChat(capsName);
       setChats((prev) => [c, ...prev]);
       onSelectChat(c.id);
       setNewChatName("");
     } catch (e: any) {
-      alert(e.message || "Failed to create chat");
+      console.log(e?.message);
     }
   }
 

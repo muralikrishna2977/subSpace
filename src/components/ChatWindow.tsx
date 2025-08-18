@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchMessages, subscribeMessages, sendMessageFlow } from "../api/chat";
 import type { Chat, Message } from "../types";
 import "./ChatWindow.css";
@@ -43,6 +43,8 @@ export default function ChatWindow({
 }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const [thinking, setThinking] = useState(false);
+
   const disposeRef = useRef<() => void>(null);
   const scrollReff = useRef<HTMLDivElement | null>(null);
   const { signOut, isSuccess, error } = useSignOut();
@@ -97,11 +99,35 @@ export default function ChatWindow({
     }
   }, [isSuccess, error, navigate]);
 
-  const thinking = useMemo(() => {
-    const length = messages.length;
-    if (length === 0) return false;
-    return messages[length - 1]?.role !== "assistant";
+  // const thinking = useMemo(() => {
+  //   const length = messages.length;
+  //   if (length === 0) return false;
+  //   return messages[length - 1]?.role !== "assistant";
+  // }, [messages]);
+
+
+
+  useEffect(() => {
+    if (messages.length === 0) {
+      setThinking(false);
+      return;
+    }
+
+    const lastMsg = messages[messages.length - 1];
+    const isUserWaiting = lastMsg.role !== "assistant";
+    setThinking(isUserWaiting);
+
+    // let timer: NodeJS.Timeout | null = null;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    if (isUserWaiting) {
+      timer = setTimeout(() => setThinking(false), 20000); // auto reset after 20s
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [messages]);
+
 
   return (
     <main className="chat-window">

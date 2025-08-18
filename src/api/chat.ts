@@ -75,7 +75,7 @@ export async function sendMessageFlow(chatId: string, content: string) {
   );
 
   // b) call Hasura Action -> n8n -> OpenRouter -> insert assistant
-  const data = await gqlFetch<{ sendMessage: { reply: string } }>(
+  await gqlFetch<{ sendMessage: { reply: string } }>(
     `
     mutation Act($chatId: uuid!, $message: String!) {
       sendMessage(chat_id:$chatId, message:$message) { reply }
@@ -85,5 +85,5 @@ export async function sendMessageFlow(chatId: string, content: string) {
   );
 
   // c) Optional: you can show optimistic "assistant is typing…" until sub updates.
-  return data.sendMessage.reply;
+  // return data.sendMessage.reply;
 }

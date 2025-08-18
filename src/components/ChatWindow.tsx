@@ -3,7 +3,7 @@ import { fetchMessages, subscribeMessages, sendMessageFlow } from "../api/chat";
 import type { Chat, Message } from "../types";
 import "./ChatWindow.css";
 
-import ProfileIcon from "../assets/profile.svg";
+import ProfileIcon from "../assets/profile2.png";
 import SendIcon from "../assets/send.svg";
 import Popup from "./Popup";
 import { useSignOut } from "@nhost/react";
@@ -144,7 +144,7 @@ export default function ChatWindow({
             </div>
           }
         >
-          <img src={ProfileIcon} height="30px" width="30px" />
+          <img src={ProfileIcon} height="40px" width="40px" />
         </Popup>
       </div>
       {!chatId ? (

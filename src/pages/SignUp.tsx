@@ -5,8 +5,8 @@ import { nhost } from "../lib/nhost";
 import "./SignUp.css";
 
 function SignUp() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setName] = useState("");
+  // const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -14,8 +14,7 @@ function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const { signUpEmailPassword, isLoading, isError, error, isSuccess } =
-    useSignUpEmailPassword();
+  const { signUpEmailPassword, isLoading, isError, error, isSuccess } = useSignUpEmailPassword();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +29,7 @@ function SignUp() {
     await nhost.auth.signOut();
 
     await signUpEmailPassword(email, password, {
-      displayName: `${firstName} ${lastName}`.trim(),
+      displayName: `${name}`.trim(),
     });
   };
 
@@ -38,7 +37,7 @@ function SignUp() {
     if (submitted && isSuccess) {
       const timer = setTimeout(() => {
         navigate("/");
-      }, 3000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [submitted, isSuccess, navigate]);
@@ -49,20 +48,13 @@ function SignUp() {
       <form className="signupform" onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="First name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           required
           disabled={isLoading}
         />
-        <input
-          type="text"
-          placeholder="Last name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          required
-          disabled={isLoading}
-        />
+        
         <input
           type="email"
           placeholder="Email"
@@ -108,7 +100,7 @@ function SignUp() {
 
       {isError && <p style={{ color: "red" }}>{error?.message}</p>}
       {submitted && isSuccess && (
-        <p style={{ color: "green" }}>Signup successful! Redirecting…</p>
+        <p style={{ color: "green" }}>Signup successful! Redirecting to SignIn page...</p>
       )}
     </div>
   );

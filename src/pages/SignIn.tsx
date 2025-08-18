@@ -8,23 +8,26 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [customError, setCustomError] = useState<string | null>(null);
 
   const navigate = useNavigate();
-
-  const { signInEmailPassword, isLoading, isError, error } =
-    useSignInEmailPassword();
+  const { signInEmailPassword, isLoading } = useSignInEmailPassword();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    await nhost.auth.signOut();
-    const res = await signInEmailPassword(email, password);
+    setCustomError(null);
 
-    if (res.isSuccess) {
-      navigate("/dashboard");
-    }
+    await nhost.auth.signOut();
+
+    const res = await signInEmailPassword(email, password);
+    console.log("Sign in response:", res);
 
     if (res.isSuccess || res.error?.error === "already-signed-in") {
       navigate("/dashboard");
+    } else if (res.needsEmailVerification) {
+      setCustomError("Please verify your email before logging in. Check your inbox or spam folder.");
+    } else if (res.isError) {
+      setCustomError(res.error?.message || "Login failed");
     }
   };
 
@@ -40,6 +43,7 @@ function SignIn() {
           required
           disabled={isLoading}
         />
+
         <input
           type={showPassword ? "text" : "password"}
           placeholder="Password"
@@ -70,27 +74,11 @@ function SignIn() {
         </button>
       </div>
 
-      <div className="signinmessage">
-        {isError && <p style={{ color: "red" }}>{error?.message}</p>}
-      </div>
-
-      <div className="demo-credentials">
-        <h4 className="demo-title">Test Users for Demo:</h4>
-        <div className="demo-user">
-          <span>
-            <strong>Email:</strong> <code>muralikrishna1502887@gmail.com</code>
-          </span>
-          <span>
-            <strong>Password:</strong> <code>abcd@1234</code>
-          </span>
+      {customError && (
+        <div className="signinmessage">
+          <p style={{ color: "red" }}>{customError}</p>
         </div>
-        <p className="demo-note">
-          <em>
-            Use these credentials to log in and test the chatbot features
-            instantly.
-          </em>
-        </p>
-      </div>
+      )}
     </div>
   );
 }

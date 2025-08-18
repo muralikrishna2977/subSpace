@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSignUpEmailPassword } from "@nhost/react";
 import { useNavigate } from "react-router-dom";
 import { nhost } from "../lib/nhost";
@@ -6,15 +6,14 @@ import "./SignUp.css";
 
 function SignUp() {
   const [name, setName] = useState("");
-  // const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [submitted, setSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [signupSuccess, setSignupSuccess] = useState(false); // ✅ our own state
   const navigate = useNavigate();
 
-  const { signUpEmailPassword, isLoading, isError, error, isSuccess } = useSignUpEmailPassword();
+  const { signUpEmailPassword, isLoading } = useSignUpEmailPassword();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,23 +23,20 @@ function SignUp() {
       return;
     }
 
-    setSubmitted(true);
-
     await nhost.auth.signOut();
 
-    await signUpEmailPassword(email, password, {
-      displayName: `${name}`.trim(),
+    const res = await signUpEmailPassword(email, password, {
+      displayName: name.trim(),
     });
-  };
 
-  useEffect(() => {
-    if (submitted && isSuccess) {
-      const timer = setTimeout(() => {
-        navigate("/");
-      }, 2000);
-      return () => clearTimeout(timer);
+    // ✅ In email verification mode, res.isSuccess will be false
+    // ✅ But as long as it's not an error, it means "signup accepted"
+    if (!res.isError) {
+      setSignupSuccess(true);
+    } else {
+      alert(res.error?.message || "Signup failed");
     }
-  }, [submitted, isSuccess, navigate]);
+  };
 
   return (
     <div className="signup">
@@ -54,7 +50,7 @@ function SignUp() {
           required
           disabled={isLoading}
         />
-        
+
         <input
           type="email"
           placeholder="Email"
@@ -63,6 +59,7 @@ function SignUp() {
           required
           disabled={isLoading}
         />
+
         <input
           type={showPassword ? "text" : "password"}
           placeholder="Password"
@@ -71,6 +68,7 @@ function SignUp() {
           required
           disabled={isLoading}
         />
+
         <input
           type={showPassword ? "text" : "password"}
           placeholder="Confirm Password"
@@ -79,6 +77,7 @@ function SignUp() {
           required
           disabled={isLoading}
         />
+
         <div className="showpasswordCheckbox">
           <input
             type="checkbox"
@@ -98,9 +97,11 @@ function SignUp() {
         <button onClick={() => navigate("/")}>Sign In</button>
       </div>
 
-      {isError && <p style={{ color: "red" }}>{error?.message}</p>}
-      {submitted && isSuccess && (
-        <p style={{ color: "green" }}>Signup successful! Redirecting to SignIn page...</p>
+      {signupSuccess && (
+        <p style={{ color: "green" }}>
+          Signup successful! A verification email has been sent. <br />
+          If you don’t see it, please check your Spam or Junk folder.
+        </p>
       )}
     </div>
   );

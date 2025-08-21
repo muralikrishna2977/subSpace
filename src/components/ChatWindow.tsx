@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { fetchMessages, subscribeMessages, sendMessageFlow } from "../api/chat";
+import {
+  fetchMessages,
+  subscribeMessages,
+  sendMessageFlow,
+  changeName,
+} from "../api/chat";
 import type { Chat, Message } from "../types";
 import "./ChatWindow.css";
 
@@ -14,7 +19,7 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
-// import "katex/dist/katex.min.css";
+import { createChat } from "../api/chat";
 
 const convertDate = (date: string) => {
   return new Date(date).toLocaleTimeString([], {
@@ -51,7 +56,7 @@ export default function ChatWindow({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!chatId) {
+    if (!chatId || chatId === "123") {
       setMessages([]);
       return;
     }
@@ -77,13 +82,34 @@ export default function ChatWindow({
   }, [messages]);
 
   async function onSend() {
-    if (!chatId || !input.trim()) return;
+    if (!input.trim()) return;
+
     const text = input.trim();
     setInput("");
+
     try {
+      if (!chatId || chatId === "123") {
+        const c = await createChat(text);
+        setChats((prev) => [c, ...prev]);
+        onSelectChat(c.id);
+        await sendMessageFlow(c.id, text);
+        return;
+      }
+
+      if (messages.length === 0) {
+        await changeName(chatId, text);
+        setChats((prev) =>
+          prev.map((chat) =>
+            chat.id === chatId
+              ? { ...chat, title: text, updated_at: new Date().toISOString() }
+              : chat,
+          ),
+        );
+      }
+
       await sendMessageFlow(chatId, text);
     } catch (e: any) {
-      alert(e.message || "Failed to send");
+      console.log(e.message ? `emessage:- ${e.message}` : "Failed to send");
     }
   }
 
@@ -99,14 +125,6 @@ export default function ChatWindow({
     }
   }, [isSuccess, error, navigate]);
 
-  // const thinking = useMemo(() => {
-  //   const length = messages.length;
-  //   if (length === 0) return false;
-  //   return messages[length - 1]?.role !== "assistant";
-  // }, [messages]);
-
-
-
   useEffect(() => {
     if (messages.length === 0) {
       setThinking(false);
@@ -117,10 +135,9 @@ export default function ChatWindow({
     const isUserWaiting = lastMsg.role !== "assistant";
     setThinking(isUserWaiting);
 
-    // let timer: NodeJS.Timeout | null = null;
     let timer: ReturnType<typeof setTimeout> | null = null;
     if (isUserWaiting) {
-      timer = setTimeout(() => setThinking(false), 30000); // auto reset after 20s
+      timer = setTimeout(() => setThinking(false), 30000);
     }
 
     return () => {
@@ -128,11 +145,15 @@ export default function ChatWindow({
     };
   }, [messages]);
 
-
   return (
     <main className="chat-window">
       <div className="headerContainer">
-        <p>{selectedChatName}</p>
+        <div className="renameDeleteContainer">
+          <p title={selectedChatName} className="chat-title">
+            {selectedChatName}
+          </p>
+        </div>
+
         <Popup
           content={
             <div className="profile">
@@ -157,7 +178,6 @@ export default function ChatWindow({
                 <div className="bubble-role">
                   {m.role === "user" ? "You" : "Assistant"}
                 </div>
-                {/* <div style={{ whiteSpace: "pre-wrap" }}>{m.content}</div> */}
                 <ReactMarkdown
                   remarkPlugins={[remarkMath, remarkGfm]}
                   rehypePlugins={[rehypeKatex]}
@@ -169,17 +189,20 @@ export default function ChatWindow({
             ))}
           </div>
           <div className="composer">
-
             <div className="composerInput">
               <input
                 disabled={thinking}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder={thinking ? "Processing..." : "Type a message…"}
+                placeholder={thinking ? "Processing..." : "Type a message"}
                 onKeyDown={(e) => e.key === "Enter" && onSend()}
               />
 
-              <button disabled={!input || thinking} className="sendButton" onClick={onSend}>
+              <button
+                disabled={!input || thinking}
+                className="sendButton"
+                onClick={onSend}
+              >
                 {thinking ? (
                   <div className="spinner" />
                 ) : (
@@ -187,7 +210,6 @@ export default function ChatWindow({
                 )}
               </button>
             </div>
-
           </div>
         </>
       )}

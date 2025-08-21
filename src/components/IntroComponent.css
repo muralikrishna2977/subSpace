@@ -15,3 +15,17 @@
 .intro img {
   border-radius: 50%;
 }
+
+.newChatButton {
+  padding: 10px 18px;
+  background-color: #c6ddfa;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.newChatButton:hover {
+  background-color: #a7c3f2;
+}

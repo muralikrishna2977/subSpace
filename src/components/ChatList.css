@@ -9,7 +9,6 @@
   padding: 12px;
   display: flex;
   flex-direction: column;
-  padding-bottom: 0px;
 }
 
 .sidebar-header {
@@ -27,6 +26,7 @@
 .chatListHeader h3 {
   margin: 0;
 }
+
 .searchInput {
   flex: 1;
   padding: 8px 12px;
@@ -38,12 +38,9 @@
     box-shadow 0.2s ease;
   outline: none;
 }
-.newChatTrigger {
-  width: 100px;
-}
 
 .newChatButton {
-  padding: 10px 18px;
+  padding: 8px 14px;
   background-color: #c6ddfa;
   font-size: 14px;
   font-weight: 500;
@@ -51,81 +48,18 @@
   border-radius: 4px;
   cursor: pointer;
 }
-
 .newChatButton:hover {
   background-color: #a7c3f2;
 }
 
-.newChattInput {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 8px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  border: solid 1px #eeeeee;
-}
-
-.newChattInput input {
-  flex: 1;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.newChattInput input:focus {
-  border-color: #4a90e2;
-  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
-  outline: none;
-}
-
-.confirmCancel button {
-  padding: 5px 9px;
-  background-color: #c6ddfa;
-  font-size: 14px;
-  font-weight: 500;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.confirmCancel {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.confirmCancel button:disabled {
-  cursor: not-allowed;
-}
-
 .chat-list {
   list-style: none;
-  padding: 0 8px 0 0;
+  padding: 0;
   margin: 12px 0 0;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
   box-sizing: border-box;
-}
-
-.chat-list::-webkit-scrollbar {
-  width: 6px;
-}
-.chat-list::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 5px;
-}
-.chat-list::-webkit-scrollbar-thumb {
-  background: rgb(186, 186, 186);
-  border-radius: 5px;
-}
-.chat-list::-webkit-scrollbar-thumb:hover {
-  background: gray;
 }
 
 .chat-item {
@@ -133,75 +67,100 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  box-sizing: border-box;
   padding: 12px 16px;
   margin: 8px 0;
-  border: none;
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
   background-color: #f8fafc;
-  border: 1px solid #e5e7eb;
-  cursor: pointer;
-  text-align: left;
   transition: background-color 0.2s ease;
 }
 
 .chat-item:hover {
   background-color: #ecf5ff;
 }
-
 .chat-item.active {
   background-color: #c0dcff;
 }
 
+.chat-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+}
+
 .chat-title {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 15px;
   color: #111;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .chat-time {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 5px;
+  gap: 8px;
   font-size: 12px;
   color: #666;
-  min-width: 70px;
 }
 
-/* .no-chats{
+.chat-right {
   display: flex;
-  flex-direction: column; 
-  align-items: center;  
-  justify-content: center;  
-  gap: 6px;  
-  margin-top: 100px;      
-} */
+  align-items: center;
+  margin-left: 12px;
+  cursor: pointer;
+  position: relative;
+}
 
+.renameDeletePopup {
+  position: absolute;
+  z-index: 100000;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  min-width: 140px;
+}
+.renameDeletePopup p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #111;
+  cursor: pointer;
+}
+.renameDeletePopup p:hover {
+  background-color: #f3f4f6;
+}
 
 .no-chats {
   display: flex;
-  flex-direction: column; 
-  align-items: center;  
-  justify-content: center;  
-  gap: 6px;  
-  margin-top: 70px;  
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 70px;
 }
-
-/* Image styling */
 .no-chats img {
-  /* margin-bottom: 16px; */
   opacity: 0.8;
 }
-
-/* Main message */
 .no-chats p:first-of-type {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 6px;
   color: #333;
 }
-
-/* Sub message */
 .no-chats p:last-of-type {
   font-size: 14px;
   color: #777;

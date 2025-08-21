@@ -3,10 +3,16 @@ import ChatList from "../components/ChatList";
 import ChatWindow from "../components/ChatWindow";
 import type { Chat } from "../types";
 import { useUserData } from "@nhost/react";
-
+const dummyChatt = {
+  id: "dummy",
+  title: "dummy",
+  user_id: "",
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+};
 export default function Dashboard() {
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
-  const [chats, setChats] = useState<Chat[]>([]);
+  const [chats, setChats] = useState<Chat[]>([dummyChatt]);
   const userData = useUserData();
 
   const selectedChatInfo = useMemo(() => {

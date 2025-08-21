@@ -87,3 +87,42 @@ export async function sendMessageFlow(chatId: string, content: string) {
   // c) Optional: you can show optimistic "assistant is typing…" until sub updates.
   // return data.sendMessage.reply;
 }
+
+export async function changeName(
+  chatId: string,
+  newTitle: string,
+): Promise<Chat> {
+  console.log("ppppp", chatId);
+  const m = `
+    mutation ChangeChatName($chatId: uuid!, $newTitle: String!) {
+      update_chats_by_pk(pk_columns: {id: $chatId}, _set: {title: $newTitle}) {
+        id
+        title
+        user_id
+        created_at
+        updated_at
+      }
+    }
+  `;
+  const data = await gqlFetch<{ update_chats_by_pk: Chat }>(m, {
+    chatId,
+    newTitle,
+  });
+  return data.update_chats_by_pk;
+}
+
+export async function deleteChat(chatId: string): Promise<Chat> {
+  const m = `
+    mutation DeleteChat($chatId: uuid!) {
+      delete_chats_by_pk(id: $chatId) {
+        id
+        title
+        user_id
+        created_at
+        updated_at
+      }
+    }
+  `;
+  const data = await gqlFetch<{ delete_chats_by_pk: Chat }>(m, { chatId });
+  return data.delete_chats_by_pk;
+}

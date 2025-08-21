@@ -21,21 +21,12 @@ function Popup({
 }: Props) {
   const [popupWidth, setPopupWidth] = useState<number>(0);
   const [popupHeight, setPopupHeight] = useState<number>(0);
-  const [triggerHeight, setTriggerHeight] = useState<number>(0);
-  const [triggerWidth, setTriggerWidth] = useState<number>(0);
   const [internalOpen, setInternalOpen] = useState<boolean>(false);
 
   const triggerRef = useRef<HTMLDivElement | null>(null);
   const popupContainerRef = useRef<HTMLDivElement | null>(null);
 
   const open = typeof openProp === "boolean" ? openProp : internalOpen;
-
-  useLayoutEffect(() => {
-    if (triggerRef.current) {
-      setTriggerHeight(triggerRef.current.offsetHeight);
-      setTriggerWidth(triggerRef.current.offsetWidth);
-    }
-  }, [open]);
 
   useLayoutEffect(() => {
     if (popupContainerRef.current) {
@@ -45,23 +36,30 @@ function Popup({
   }, [open]);
 
   const popupContainerStyle = useMemo(() => {
-    if (align === "left") {
+    if (!triggerRef.current) return {};
+
+    const rect = triggerRef.current.getBoundingClientRect();
+
+    if (align === "right") {
       return {
-        top: `${triggerHeight}px`,
-        left: `-${popupWidth - triggerWidth}px`,
+        top: `${rect.top}px`,
+        left: `${rect.right + 8}px`,
       };
     }
-    if (align === "right") {
-      return { top: `${triggerHeight}px`, left: "0px" };
+    if (align === "left") {
+      return {
+        top: `${rect.top + 45}px`,
+        left: `${rect.left - popupWidth + 40}px`,
+      };
     }
     if (align === "topCenter") {
       return {
-        top: `-${popupHeight + 6}px`,
-        left: `${triggerWidth / 2 - popupWidth / 2}px`,
+        top: `${rect.top - popupHeight - 6}px`,
+        left: `${rect.left + rect.width / 2 - popupWidth / 2}px`,
       };
     }
     return {};
-  }, [align, popupHeight, popupWidth, triggerHeight, triggerWidth]);
+  }, [align, popupHeight, popupWidth]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

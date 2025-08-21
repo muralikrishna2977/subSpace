@@ -1,8 +1,5 @@
-import { useState } from "react";
 import SubspaceLogo from "../assets/subspaceLogo.jpeg";
 import "./IntroComponent.css";
-import NewChatPopup from "./NewChatPopup";
-import { createChat } from "../api/chat";
 import type { Chat } from "../types";
 
 type Props = {
@@ -11,23 +8,18 @@ type Props = {
 };
 
 function IntroComponent(props: Props) {
-  const { setChats, onSelectChat } = props;
-  const [newChatName, setNewChatName] = useState<string>("");
-  const [openNewChatPopup, setOpenNewChatPopup] = useState(false);
+  const { onSelectChat } = props;
 
   async function confirmCreateChat() {
-    setOpenNewChatPopup(false);
+    const placeholder: Chat = {
+      id: "123",
+      title: "New Chat",
+      user_id: "",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
 
-    try {
-      const capsName =
-        newChatName.charAt(0).toUpperCase() + newChatName.slice(1);
-      const c = await createChat(capsName);
-      setChats((prev) => [c, ...prev]);
-      onSelectChat(c.id);
-      setNewChatName("");
-    } catch (e: any) {
-      alert(e.message || "Failed to create chat");
-    }
+    onSelectChat(placeholder.id);
   }
 
   return (
@@ -35,14 +27,9 @@ function IntroComponent(props: Props) {
       <img src={SubspaceLogo} height="100px" width="100px" />
       <h1>Welcome to Sub Space Chatbot</h1>
       <p className="empty">Select a chat or create a new one.</p>
-      <NewChatPopup
-        openNewChatPopup={openNewChatPopup}
-        setOpenNewChatPopup={setOpenNewChatPopup}
-        newChatName={newChatName}
-        setNewChatName={setNewChatName}
-        confirmCreateChat={confirmCreateChat}
-        align="topCenter"
-      />
+      <button className="newChatButton" onClick={confirmCreateChat}>
+        New Chat
+      </button>
     </div>
   );
 }

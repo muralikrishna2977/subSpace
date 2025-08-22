@@ -83,14 +83,11 @@ export default function ChatList({
         <ul className="chat-list">
           {filteredChats.map((c) =>
             c.id !== "dummy" ? (
-              <li key={c.id} title={c.title || "(untitled)"}>
+              <li onClick={() => handleChattSelect(c.id)} key={c.id} title={c.title || "(untitled)"}>
                 <div
                   className={`chat-item ${c.id === selectedChatId ? "active" : ""}`}
                 >
-                  <button
-                    className="chat-left"
-                    onClick={() => handleChattSelect(c.id)}
-                  >
+                  <button className="chat-left">
                     <div className="chat-title">{c.title || "(untitled)"}</div>
                     <div className="chat-time">
                       <div>

@@ -173,8 +173,8 @@ export default function ChatWindow({
       ) : (
         <>
           <div ref={scrollReff} className="messages">
-            {messages.map((m) => (
-              <div key={m.id} className={`bubble ${m.role}`}>
+            {messages.map((m, i) => (
+              <div key={m.id} className={`bubble ${m.role} ${i === messages.length - 1 ? "avoidMarginForForLastMessage" : ""}`}>
                 <div className="bubble-role">
                   {m.role === "user" ? "You" : "Assistant"}
                 </div>

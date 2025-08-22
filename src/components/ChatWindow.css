@@ -89,7 +89,6 @@
   background: gray;
 }
 .bubble {
-  max-width: 70%;
   padding: 10px;
   border-radius: 10px;
 }
@@ -97,11 +96,17 @@
 .bubble.user {
   align-self: flex-end;
   background: #dbeafe;
+  max-width: 70%;
 }
 
 .bubble.assistant {
   align-self: flex-start;
   background: #f3f4f6;
+  max-width: 100%;
+  margin-bottom: 50px;
+}
+.avoidMarginForForLastMessage {
+  margin-bottom: 0px !important;
 }
 
 .bubble-role {
